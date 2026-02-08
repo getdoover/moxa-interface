@@ -1,12 +1,12 @@
 [project]
 name = "moxa-interface"
 version = "0.1.0"
-description = "Add your description here"
+description = "Allows other Doover apps to publish/receive configurable information to/from one or more Moxa i/o hubs via ethernet"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "httpx>=0.28.1",
     "pydoover>=0.4.13",
-    "transitions>=0.9.2",
 ]
 
 [project.scripts]

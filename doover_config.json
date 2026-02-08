@@ -1,51 +1,172 @@
 {
     "moxa_interface": {
         "name": "moxa_interface",
-        "display_name": "moxa-interface",
+        "display_name": "Moxa Interface",
         "type": "DEV",
         "visibility": "PUB",
         "allow_many": true,
         "description": "Allows other Doover apps to publish/receive configurable information to/from one or more Moxa i/o hubs via ethernet",
         "long_description": "README.md",
-        "depends_on": [],
-        "owner_org_key": "FIX-ME",
-        "image_name": "ghcr.io/getdoover/moxa-interface:main",
-        "container_registry_profile_key": "FIX-ME",
+        "depends_on": [
+            "device_agent"
+        ],
+        "owner_org_key": "",
+        "image_name": "ghcr.io/getdoover/moxa_interface:main",
+        "container_registry_profile_key": "",
         "build_args": "--platform linux/amd64,linux/arm64",
+        "lambda_config": {},
+        "organisation_id": null,
+        "key": null,
+        "owner_org_id": null,
+        "code_repo_id": null,
+        "container_registry_profile_id": null,
+        "repo_branch": "main",
+        "icon_url": "https://raw.githubusercontent.com/getdoover/moxa-interface/main/assets/icon.png",
+        "staging_config": {},
+        "export_config_command": null,
+        "run_command": null,
+        "lambda_arn": null,
         "config_schema": {
             "$schema": "https://json-schema.org/draft/2020-12/schema",
             "$id": "",
             "title": "Application Config",
             "type": "object",
             "properties": {
-                "digital_outputs_enabled": {
-                    "title": "Digital Outputs Enabled",
-                    "x-name": "digital_outputs_enabled",
+                "moxa_hubs": {
+                    "title": "Moxa Hubs",
+                    "x-name": "moxa_hubs",
+                    "x-hidden": false,
+                    "type": "array",
+                    "description": "List of Moxa ioLogik hub configurations",
+                    "items": {
+                        "title": "Hub",
+                        "x-name": "hub",
+                        "x-hidden": false,
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "title": "Name",
+                                "x-name": "name",
+                                "x-hidden": false,
+                                "type": "string",
+                                "description": "Human-readable name for this hub (used in tag keys)"
+                            },
+                            "ip_address": {
+                                "title": "IP Address",
+                                "x-name": "ip_address",
+                                "x-hidden": false,
+                                "type": "string",
+                                "description": "IP address of the Moxa hub"
+                            },
+                            "enabled": {
+                                "title": "Enabled",
+                                "x-name": "enabled",
+                                "x-hidden": false,
+                                "type": "boolean",
+                                "description": "Whether to poll this hub",
+                                "default": true
+                            },
+                            "poll_interval": {
+                                "title": "Poll Interval",
+                                "x-name": "poll_interval",
+                                "x-hidden": false,
+                                "type": "number",
+                                "description": "Seconds between polls for this hub",
+                                "default": 2.0
+                            },
+                            "di_channels": {
+                                "title": "DI Channels",
+                                "x-name": "di_channels",
+                                "x-hidden": false,
+                                "type": "array",
+                                "description": "Digital input channel indices to read",
+                                "items": {
+                                    "title": "Channel Index",
+                                    "x-name": "channel_index",
+                                    "x-hidden": false,
+                                    "type": "integer"
+                                }
+                            },
+                            "do_channels": {
+                                "title": "DO Channels",
+                                "x-name": "do_channels",
+                                "x-hidden": false,
+                                "type": "array",
+                                "description": "Digital output channel indices to manage",
+                                "items": {
+                                    "title": "Channel Index",
+                                    "x-name": "channel_index",
+                                    "x-hidden": false,
+                                    "type": "integer"
+                                }
+                            },
+                            "ai_channels": {
+                                "title": "AI Channels",
+                                "x-name": "ai_channels",
+                                "x-hidden": false,
+                                "type": "array",
+                                "description": "Analog input channel indices to read",
+                                "items": {
+                                    "title": "Channel Index",
+                                    "x-name": "channel_index",
+                                    "x-hidden": false,
+                                    "type": "integer"
+                                }
+                            },
+                            "ao_channels": {
+                                "title": "AO Channels",
+                                "x-name": "ao_channels",
+                                "x-hidden": false,
+                                "type": "array",
+                                "description": "Analog output channel indices to manage",
+                                "items": {
+                                    "title": "Channel Index",
+                                    "x-name": "channel_index",
+                                    "x-hidden": false,
+                                    "type": "integer"
+                                }
+                            }
+                        },
+                        "additionalElements": true,
+                        "required": [
+                            "name",
+                            "ip_address",
+                            "di_channels",
+                            "do_channels",
+                            "ai_channels",
+                            "ao_channels"
+                        ]
+                    }
+                },
+                "request_timeout": {
+                    "title": "Request Timeout",
+                    "x-name": "request_timeout",
+                    "x-hidden": false,
+                    "type": "number",
+                    "description": "HTTP request timeout in seconds",
+                    "default": 2.0
+                },
+                "publish_on_change_only": {
+                    "title": "Publish On Change Only",
+                    "x-name": "publish_on_change_only",
                     "x-hidden": false,
                     "type": "boolean",
-                    "default": true
+                    "description": "Only publish tags when values change",
+                    "default": false
                 },
-                "a_funny_message": {
-                    "title": "A Funny Message",
-                    "x-name": "a_funny_message",
+                "debug_enabled": {
+                    "title": "Debug Enabled",
+                    "x-name": "debug_enabled",
                     "x-hidden": false,
-                    "type": "string"
-                },
-                "simulator_app_key": {
-                    "format": "doover-application",
-                    "title": "Simulator App Key",
-                    "x-name": "simulator_app_key",
-                    "x-hidden": false,
-                    "type": "string",
-                    "description": "The app key for the simulator"
+                    "type": "boolean",
+                    "description": "Enable debug logging to channel",
+                    "default": false
                 }
             },
             "additionalElements": true,
             "required": [
-                "a_funny_message",
-                "simulator_app_key"
+                "moxa_hubs"
             ]
-        },
-        "organisation_id": "FIX-ME"
+        }
     }
 }

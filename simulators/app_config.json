@@ -1,6 +1,17 @@
 {
-    "simulator_app_key": "sim_app_key",
-    "digital_input_count": 1,
-    "digital_output_count": 2,
-    "a_funny_message": "yeeha"
+    "hubs": [
+        {
+            "name": "sim_hub",
+            "ip_address": "127.0.0.1:9090",
+            "enabled": true,
+            "poll_interval": 2.0,
+            "di_channels": [0, 1, 2, 3],
+            "do_channels": [0, 1, 2, 3],
+            "ai_channels": [0, 1, 2, 3],
+            "ao_channels": [0, 1, 2, 3]
+        }
+    ],
+    "request_timeout": 2.0,
+    "publish_on_change_only": false,
+    "debug_enabled": true
 }
